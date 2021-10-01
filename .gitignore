@@ -1,3 +1,5 @@
+# Java project ignores:
+
 # Compiled class file
 *.class
 
@@ -21,3 +23,21 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+
+# react-native ignores:
+
+node_modules/
+.expo/
+npm-debug.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+
+# macOS
+.DS_Store
+
