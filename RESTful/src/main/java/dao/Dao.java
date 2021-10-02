@@ -26,4 +26,23 @@ public class Dao {
 		}
 		return bloodType;
 	}
+	
+	//Work in progress - Joni
+	//Not sure if this is correct
+	public static BloodType getDataForAllBloodTypesFromDatabase() {
+		BloodType bloodType = new BloodType();
+		try {
+			Connection conn = Connections.getConnection();
+			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM bloodStatus");
+			ResultSet RS = pstmt.executeQuery();
+			while (RS.next()) {
+				bloodType.setId(RS.getInt(1));
+				bloodType.setBloodType(RS.getString(2));
+				bloodType.setAmount(RS.getInt(3));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return bloodType;
+	}
 }
