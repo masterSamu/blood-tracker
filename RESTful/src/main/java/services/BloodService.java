@@ -13,7 +13,7 @@ import dao.Dao;
 import data.BloodType;
 @Path("/bloodservice")
 public class BloodService {
-	
+	//test comment
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
