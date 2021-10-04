@@ -1,8 +1,8 @@
 import React from "react";
-import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 
 const bloodStatusItem = (props) => {
-    console.log(props)
+  
   function getBorderColor(status) {
     if (status === "Needed") return { borderColor: "salmon" };
     if (status === "Ok") return { borderColor: "yellow" };
@@ -25,7 +25,7 @@ const bloodStatusItem = (props) => {
       <Text style={[{ fontSize: 65 }, displayBloodStatus()]}>
         {props.bloodType}
       </Text>
-      <Text style={{fontSize: 14}}>Tap to refresh</Text>
+      <Text style={{ fontSize: 14 }}>Tap to refresh</Text>
     </TouchableOpacity>
   );
 };

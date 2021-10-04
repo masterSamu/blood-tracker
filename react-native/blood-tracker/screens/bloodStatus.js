@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import * as Notifications from "expo-notifications";
 import { checkBloodTypeState } from "../helperFunctions/bloodTypeFunctions";
 import BloodStatusItem from "../components/bloodStatusItem";
@@ -13,10 +13,8 @@ Notifications.setNotificationHandler({
 });
 
 const bloodStatus = () => {
-  const [bloodData, setBloodData] = useState();
-  const [id, setId] = useState();
   const [status, setStatus] = useState("Good");
-  const [bloodType, setBloodType] = useState("B+");
+  const [bloodType, setBloodType] = useState("O-"); // This value comes from SQLite
   const [bloodTypeError, setBloodTypeError] = useState(false);
 
   useEffect(() => {
@@ -51,7 +49,6 @@ const bloodStatus = () => {
       const responseData = await res.json();
       console.log(responseData);
       if (responseData !== null) {
-        setBloodData(responseData);
         setStatus(checkBloodTypeState(responseData));
         setBloodTypeError(false);
       } else {
@@ -71,10 +68,12 @@ const bloodStatus = () => {
 
   return (
     <View style={styles.container}>
+      <Text style={{fontSize: 20}}>Status for your blood type</Text>
       <BloodStatusItem
         status={status}
         bloodType={bloodType}
         refresh={handlePress}
+        bloodTypeError={bloodTypeError}
       ></BloodStatusItem>
       <Text>Current blood status: {status}</Text>
     </View>
@@ -89,15 +88,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  containerStatus: {
-    height: 200,
-    width: 200,
-    margin: 25,
-    borderWidth: 10,
-    borderRadius: 365,
-    alignItems: "center",
-    justifyContent: "center",
-  },
 });
 
 async function activatePushNotification() {
@@ -106,6 +96,6 @@ async function activatePushNotification() {
       title: "Your blood is needed now!",
       body: "Come donate your blood now.",
     },
-    trigger: { seconds: 2 },
+    trigger: { seconds: 1 },
   });
 }

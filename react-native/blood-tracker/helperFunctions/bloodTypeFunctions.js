@@ -8,7 +8,7 @@ export const checkBloodTypeState = (bloodData) => {
 }
 
 function bloodStatus(amount) {
-    let okLevel = 300;
+    let okLevel = 350;
     let goodLevel = 750;
     let currentStatus = "";
     
