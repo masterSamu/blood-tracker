@@ -13,7 +13,7 @@ import dao.Dao;
 import data.BloodType;
 @Path("/bloodservice")
 public class BloodService {
-	
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -22,5 +22,13 @@ public class BloodService {
 		return Dao.getDataForOneBloodTypeFromDatabase(blood.getId());
 	}
 	
-	
+	//Work in progress - Joni
+	//Not sure if this is correct
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/getdataforallbloodtypes")
+	public BloodType getDataForAllBloodTypesFromDatabase(BloodType blood) {
+		return Dao.getDataForOneBloodTypeFromDatabase(blood.getId());
+	}
 }
