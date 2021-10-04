@@ -19,7 +19,7 @@ public class BloodService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getdataforonebloodtype")
 	public BloodType getDataForOneBloodType(BloodType blood) {
-		return Dao.getDataForOneBloodTypeFromDatabase(blood.getId());
+		return Dao.getDataForOneBloodTypeFromDatabase(blood.getBloodType());
 	}
 	
 	

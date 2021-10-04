@@ -9,12 +9,12 @@ import data.BloodType;
 
 public class Dao {
 	
-	public static BloodType getDataForOneBloodTypeFromDatabase(int id) {
+	public static BloodType getDataForOneBloodTypeFromDatabase(String userBloodType) {
 		BloodType bloodType = new BloodType();
 		try {
 			Connection conn = Connections.getConnection();
-			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM bloodStatus WHERE id=?");
-			pstmt.setInt(1, id);
+			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM bloodStatus WHERE bloodType=?");
+			pstmt.setString(1, userBloodType);
 			ResultSet RS = pstmt.executeQuery();
 			while (RS.next()) {
 				bloodType.setId(RS.getInt(1));
