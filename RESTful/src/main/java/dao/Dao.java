@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import data.BloodType;
 
@@ -29,20 +31,23 @@ public class Dao {
 	
 	//Work in progress - Joni
 	//Not sure if this is correct
-	public static BloodType getDataForAllBloodTypesFromDatabase() {
-		BloodType bloodType = new BloodType();
+	public static List<BloodType> getDataForAllBloodTypesFromDatabase() {
+		List<BloodType> list = new ArrayList<BloodType>();
 		try {
 			Connection conn = Connections.getConnection();
 			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM bloodStatus");
 			ResultSet RS = pstmt.executeQuery();
+			
 			while (RS.next()) {
+				BloodType bloodType = new BloodType();
 				bloodType.setId(RS.getInt(1));
 				bloodType.setBloodType(RS.getString(2));
 				bloodType.setAmount(RS.getInt(3));
+				list.add(bloodType);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return bloodType;
+		return list;
 	}
 }

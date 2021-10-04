@@ -4,6 +4,10 @@
   <threadsafe>true</threadsafe>
   <sessions-enabled>false</sessions-enabled>
   <runtime>java8</runtime>
+  
+  <automatic-scaling>
+  	<max-instances>2</max-instances> 
+  </automatic-scaling>
 
   <system-properties>
     <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>

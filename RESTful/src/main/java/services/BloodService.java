@@ -1,10 +1,9 @@
 package services;
 
-import java.util.ArrayList;
-
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -24,11 +23,11 @@ public class BloodService {
 	
 	//Work in progress - Joni
 	//Not sure if this is correct
-	@POST
+	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getdataforallbloodtypes")
-	public BloodType getDataForAllBloodTypesFromDatabase(BloodType blood) {
-		return Dao.getDataForOneBloodTypeFromDatabase(blood.getId());
+	public List<BloodType> getDataForAllBloodTypesFromDatabase() {
+		return Dao.getDataForAllBloodTypesFromDatabase();
 	}
 }
