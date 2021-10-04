@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
 import * as Notifications from "expo-notifications";
 import { checkBloodTypeState } from "../helperFunctions/bloodTypeFunctions";
+import BloodStatusItem from "../components/bloodStatusItem";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -15,22 +16,23 @@ const bloodStatus = () => {
   const [bloodData, setBloodData] = useState();
   const [id, setId] = useState();
   const [status, setStatus] = useState("Good");
-  const [bloodType, setBloodType] = useState("0-");
+  const [bloodType, setBloodType] = useState("B+");
   const [bloodTypeError, setBloodTypeError] = useState(false);
 
   useEffect(() => {
     fetchBloodData();
     if (status === "Needed") {
-        activatePushNotification();
+      activatePushNotification();
     }
   }, [bloodType]);
 
   async function fetchBloodData() {
     console.log("Fetching..");
+    console.log("bloodtype: " + bloodType);
     let res = null;
     try {
       res = await fetch(
-        "http://10.0.2.2:8080/rest/bloodservice/getdataforonebloodtype",
+        "https://bloodtracker.ew.r.appspot.com/rest/bloodservice/getdataforonebloodtype",
         {
           method: "POST",
           headers: {
@@ -60,37 +62,20 @@ const bloodStatus = () => {
     }
   }
 
-  const handlePress = () => {
+  function handlePress() {
     fetchBloodData();
     if (status === "Needed") {
-        activatePushNotification();
-    }
-  };
-
-  function getBorderColor(status) {
-    if (status === "Needed") return { borderColor: "salmon" };
-    if (status === "Ok") return { borderColor: "lightyellow" };
-    if (status === "Good") return { borderColor: "lightgreen" };
-  }
-
-  function displayBloodStatus() {
-    if (!bloodTypeError) {
-      return { display: "flex" };
-    } else {
-      return { display: "none" };
+      activatePushNotification();
     }
   }
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={[styles.containerStatus, getBorderColor(status)]}
-        onPress={handlePress}
-      >
-        <Text style={[{ fontSize: 55 }, displayBloodStatus()]}>
-          {bloodType}
-        </Text>
-      </TouchableOpacity>
+      <BloodStatusItem
+        status={status}
+        bloodType={bloodType}
+        refresh={handlePress}
+      ></BloodStatusItem>
       <Text>Current blood status: {status}</Text>
     </View>
   );
