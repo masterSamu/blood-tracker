@@ -18,11 +18,14 @@ public class BloodService {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/getdataforonebloodtype")
 	public BloodType getDataForOneBloodType(BloodType blood) {
-		return Dao.getDataForOneBloodTypeFromDatabase(blood.getBloodType());
+		if (!blood.getBloodType().equals("")) {
+			return Dao.getDataForOneBloodTypeFromDatabase(blood.getBloodType());
+		} else {
+			return null;
+		}
 	}
 	
 	//Work in progress - Joni
-	//Not sure if this is correct
 	@GET
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)

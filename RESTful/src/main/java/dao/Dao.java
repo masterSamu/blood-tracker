@@ -23,6 +23,7 @@ public class Dao {
 				bloodType.setBloodType(RS.getString(2));
 				bloodType.setAmount(RS.getInt(3));
 			}
+			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -45,6 +46,7 @@ public class Dao {
 				bloodType.setAmount(RS.getInt(3));
 				list.add(bloodType);
 			}
+			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
