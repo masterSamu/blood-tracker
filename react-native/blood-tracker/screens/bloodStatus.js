@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
 import * as Notifications from "expo-notifications";
 import { checkBloodTypeState } from "../helperFunctions/bloodTypeFunctions";
 import BloodStatusItem from "../components/bloodStatusItem";
@@ -13,8 +13,8 @@ Notifications.setNotificationHandler({
 });
 
 const bloodStatus = () => {
-  const [status, setStatus] = useState("Good");
-  const [bloodType, setBloodType] = useState("O-"); // This value comes from SQLite
+  const [status, setStatus] = useState("");
+  const [bloodType, setBloodType] = useState("O+"); // This value should come from SQLite
   const [bloodTypeError, setBloodTypeError] = useState(false);
 
   useEffect(() => {
@@ -25,37 +25,37 @@ const bloodStatus = () => {
   }, [bloodType]);
 
   async function fetchBloodData() {
-    console.log("Fetching..");
-    console.log("bloodtype: " + bloodType);
-    let res = null;
-    try {
-      res = await fetch(
-        "https://bloodtracker.ew.r.appspot.com/rest/bloodservice/getdataforonebloodtype",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            bloodType: bloodType,
-          }),
-        }
-      );
-    } catch (error) {
-      console.log(error);
-    }
-
-    try {
-      const responseData = await res.json();
-      console.log(responseData);
-      if (responseData !== null) {
-        setStatus(checkBloodTypeState(responseData));
-        setBloodTypeError(false);
-      } else {
-        setBloodTypeError(true);
+    if (bloodType !== "" && bloodType !== null) {
+      let res = null;
+      try {
+        res = await fetch(
+          "https://bloodtracker.ew.r.appspot.com/rest/bloodservice/getdataforonebloodtype",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              bloodType: bloodType,
+            }),
+          }
+        );
+      } catch (error) {
+        console.log(error);
       }
-    } catch (err) {
-      console.log(err);
+
+      try {
+        const responseData = await res.json();
+        console.log(responseData);
+        if (responseData !== null) {
+          setStatus(checkBloodTypeState(responseData));
+          setBloodTypeError(false);
+        } else {
+          setBloodTypeError(true);
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
   }
 
@@ -68,7 +68,7 @@ const bloodStatus = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={{fontSize: 20}}>Status for your blood type</Text>
+      <Text style={{ fontSize: 20 }}>Status for your blood type</Text>
       <BloodStatusItem
         status={status}
         bloodType={bloodType}
@@ -93,8 +93,8 @@ const styles = StyleSheet.create({
 async function activatePushNotification() {
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: "Your blood is needed now!",
-      body: "Come donate your blood now.",
+      title: "We need your blood!",
+      body: "Come donate now.",
     },
     trigger: { seconds: 1 },
   });

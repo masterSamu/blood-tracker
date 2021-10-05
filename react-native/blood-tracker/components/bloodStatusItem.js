@@ -1,15 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { getBorderColor } from "../helperFunctions/styleFunctions";
 
 const bloodStatusItem = (props) => {
-  
-  function getBorderColor(status) {
-    if (status === "Needed") return { borderColor: "salmon" };
-    if (status === "Ok") return { borderColor: "yellow" };
-    if (status === "Good") return { borderColor: "lightgreen" };
-  }
 
-  function displayBloodStatus() {
+  function displayBloodType() {
     if (!props.bloodTypeError) {
       return { display: "flex" };
     } else {
@@ -22,7 +17,7 @@ const bloodStatusItem = (props) => {
       style={[styles.containerStatus, getBorderColor(props.status)]}
       onPress={props.refresh}
     >
-      <Text style={[{ fontSize: 65 }, displayBloodStatus()]}>
+      <Text style={[{ fontSize: 65 }, displayBloodType()]}>
         {props.bloodType}
       </Text>
       <Text style={{ fontSize: 14 }}>Tap to refresh</Text>
@@ -37,6 +32,7 @@ const styles = StyleSheet.create({
     margin: 25,
     borderWidth: 10,
     borderRadius: 365,
+    borderColor: "lightgray",
     alignItems: "center",
     justifyContent: "center",
   },
