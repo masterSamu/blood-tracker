@@ -8,7 +8,7 @@ export const init=()=>{
     const promise=new Promise((resolve, reject)=>{
         db.transaction((tx)=>{
             //By default, primary key is auto_incremented - we do not add anything to that column
-        tx.executeSql('create table if not exists donor(donorID integer not null primary key, firstName text not null, lastname real not null, bloodType text not null);',
+        tx.executeSql('create table if not exists donor(donorID integer not null primary key, bloodType text not null);',
          
             //second parameters of execution:empty brackets - this parameter is not needed when creating table            
             [],
@@ -27,13 +27,13 @@ export const init=()=>{
 };
 
 
-export const addPerson=(firstName, lastname, bloodType)=>{
+export const addPerson=(id, bloodType)=>{
     const promise=new Promise((resolve, reject)=>{
         db.transaction((tx)=>{
             //Here we use the Prepared statement, just putting placeholders to the values to be inserted
-            tx.executeSql('insert into donor(firstName, lastname, bloodType) values(?,?,?);',
+            tx.executeSql('insert into donor(id, bloodType) values(?,?);',
             //And the values come here
-            [firstName, lastname, bloodType],
+            [id, bloodType],
             //If the transaction succeeds, this is called
             (_, result)=>{
                 resolve(result);
