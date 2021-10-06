@@ -9,20 +9,11 @@ import BloodStatus from "./screens/bloodStatus";
 
 const Drawer = createDrawerNavigator();
 
-function homeScreen() {
-  return (
-    <View style={styles.container}>
-      <BloodStatus></BloodStatus>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
-
 export default function App() {
   return (
     <NavigationContainer>
       <Drawer.Navigator>
-        <Drawer.Screen name="Home" component={homeScreen} />
+        <Drawer.Screen name="Home" component={BloodStatus} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
 import * as Notifications from "expo-notifications";
 import { checkBloodTypeState } from "../helperFunctions/bloodTypeFunctions";
 import BloodStatusItem from "../components/bloodStatusItem";
+import AddBloodTypeModal from "../components/AddBloodTypeModal";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -16,16 +17,24 @@ const bloodStatus = () => {
   const [status, setStatus] = useState("");
   const [bloodType, setBloodType] = useState("O+"); // This value should come from SQLite
   const [bloodTypeError, setBloodTypeError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    fetchBloodData();
+    if (bloodType === "") {
+      //setModalVisible(true);  uncomment this when app is finished.
+    } else {
+      fetchBloodData();
+    }
     if (status === "Needed") {
       activatePushNotification();
     }
   }, [bloodType]);
 
+
   async function fetchBloodData() {
     if (bloodType !== "" && bloodType !== null) {
+      setIsLoading(true);
       let res = null;
       try {
         res = await fetch(
@@ -56,14 +65,20 @@ const bloodStatus = () => {
       } catch (err) {
         console.log(err);
       }
+      setIsLoading(false);
     }
   }
 
   function handlePress() {
+    setStatus("");
     fetchBloodData();
     if (status === "Needed") {
       activatePushNotification();
     }
+  }
+
+  function openModal() {
+    setModalVisible(true);
   }
 
   return (
@@ -74,8 +89,16 @@ const bloodStatus = () => {
         bloodType={bloodType}
         refresh={handlePress}
         bloodTypeError={bloodTypeError}
+        isLoading={isLoading}
       ></BloodStatusItem>
       <Text>Current blood status: {status}</Text>
+
+      <Button onPress={openModal} title="Open add blood status" />
+      <AddBloodTypeModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        setBloodType={setBloodType}
+      ></AddBloodTypeModal>
     </View>
   );
 };
