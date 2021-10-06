@@ -29,9 +29,13 @@ const bloodStatusItem = (props) => {
           onPress={props.refresh}
           underlayColor={"black"}
         >
-          <Text style={[{ fontSize: 65 }, displayBloodType()]}>
+          { props.generalError ? (
+            <Text style={{fontSize: 30}}>Error</Text>
+          ) : (
+            <Text style={[{ fontSize: 65 }, displayBloodType()]}>
             {props.bloodType}
           </Text>
+          )}
           <Text style={{ fontSize: 14 }}>Tap to refresh</Text>
         </TouchableOpacity>
       )}
