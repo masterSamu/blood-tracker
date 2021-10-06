@@ -17,10 +17,22 @@ const BloodDropDownPicker = (props) => {
       value={value}
       setValue={setValue}
       itemKey="value"
-      placeholder="Select your blood type"
+      placeholder={props.items.length > 0 ? props.items[0].value : "Select"}
       itemSeparator={true}
       closeAfterSelecting={true}
-      onChangeValue={() => props.setModalVisible(false)}
+      onChangeValue={() => props.setSelectedBloodType(value)}
+      style={{
+        backgroundColor: "lightyellow",
+      }}
+      containerStyle={{
+        width: "50%",
+        height: 50
+      }}
+      textStyle={{
+        fontSize: 30,
+        fontWeight: "bold",
+        marginLeft: "20%",
+      }}
     />
   );
 };

@@ -15,20 +15,22 @@ Notifications.setNotificationHandler({
 
 const bloodStatus = () => {
   const [status, setStatus] = useState("");
-  const [bloodType, setBloodType] = useState("O+"); // This value should come from SQLite
+  const [bloodType, setBloodType] = useState(""); // This value should come from SQLite
   const [bloodTypeError, setBloodTypeError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    fetchBloodData();
+    if (bloodType === "") {
+      setModalVisible(true);
+    } else {
+      fetchBloodData();
+    }
     if (status === "Needed") {
       activatePushNotification();
     }
   }, [bloodType]);
 
-  if (bloodType === "") {
-  }
 
   async function fetchBloodData() {
     if (bloodType !== "" && bloodType !== null) {
@@ -90,11 +92,12 @@ const bloodStatus = () => {
         isLoading={isLoading}
       ></BloodStatusItem>
       <Text>Current blood status: {status}</Text>
-      
+
       <Button onPress={openModal} title="Open add blood status" />
       <AddBloodTypeModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        setBloodType={setBloodType}
       ></AddBloodTypeModal>
     </View>
   );

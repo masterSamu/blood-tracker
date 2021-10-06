@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Modal, Pressable } from "react-native";
 import BloodDropDownPicker from "./BloodDropDownPicker";
 
@@ -9,8 +9,17 @@ let bloods = [
 ];
 
 const AddBloodTypeModal = (props) => {
-  const [bloodTypeList, setBloodTypeList] = useState(bloods);
+  const [bloodTypeList, setBloodTypeList] = useState([]);
   const [selectedBloodType, setSelectedBloodType] = useState("");
+
+  function handleSelection() {
+    props.setBloodType(selectedBloodType);
+    props.setModalVisible(false);
+  }
+
+  useEffect(() => {
+      setBloodTypeList(bloods)
+  }, [])
 
   return (
     <View>
@@ -30,7 +39,7 @@ const AddBloodTypeModal = (props) => {
             setSelectedBloodType={setSelectedBloodType}
           ></BloodDropDownPicker>
           <View style={styles.btnContainer}>
-            <Pressable style={styles.btnSelect}>
+            <Pressable style={styles.btnSelect} onPress={handleSelection}>
               <Text style={{ fontSize: 25 }}>Select</Text>
             </Pressable>
             <Pressable
@@ -55,28 +64,29 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   container: {
-    height: "50%",
+    height: "100%",
     marginTop: "auto",
     justifyContent: "space-evenly",
     alignItems: "center",
-    opacity: 0.85,
-    backgroundColor: "lightgrey",
-    padding: 15
+    backgroundColor: "#FF7F7F",
+    padding: 15,
   },
   btnContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: 10
+    padding: 10,
   },
   btnSelect: {
     padding: 10,
     margin: 10,
-    backgroundColor: "lightgreen"
+    backgroundColor: "lightgreen",
+    borderWidth: 2,
   },
   btnClose: {
     flexDirection: "row",
     padding: 10,
     margin: 10,
     backgroundColor: "lightgrey",
+    borderWidth: 2,
   },
 });
