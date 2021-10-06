@@ -22,7 +22,7 @@ const bloodStatus = () => {
 
   useEffect(() => {
     if (bloodType === "") {
-      setModalVisible(true);
+      //setModalVisible(true);  uncomment this when app is finished.
     } else {
       fetchBloodData();
     }
