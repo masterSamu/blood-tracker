@@ -15,7 +15,7 @@ Notifications.setNotificationHandler({
 
 const bloodStatus = () => {
   const [status, setStatus] = useState("");
-  const [bloodType, setBloodType] = useState(""); // This value should come from SQLite
+  const [bloodType, setBloodType] = useState("O+"); // This value should come from SQLite
   const [bloodTypeError, setBloodTypeError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
