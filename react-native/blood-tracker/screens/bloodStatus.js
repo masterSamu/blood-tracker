@@ -16,6 +16,7 @@ const bloodStatus = () => {
   const [status, setStatus] = useState("");
   const [bloodType, setBloodType] = useState("O+"); // This value should come from SQLite
   const [bloodTypeError, setBloodTypeError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchBloodData();
@@ -26,6 +27,7 @@ const bloodStatus = () => {
 
   async function fetchBloodData() {
     if (bloodType !== "" && bloodType !== null) {
+      setIsLoading(true)
       let res = null;
       try {
         res = await fetch(
@@ -56,10 +58,12 @@ const bloodStatus = () => {
       } catch (err) {
         console.log(err);
       }
+      setIsLoading(false);
     }
   }
 
   function handlePress() {
+    setStatus("")
     fetchBloodData();
     if (status === "Needed") {
       activatePushNotification();
@@ -74,6 +78,7 @@ const bloodStatus = () => {
         bloodType={bloodType}
         refresh={handlePress}
         bloodTypeError={bloodTypeError}
+        isLoading={isLoading}
       ></BloodStatusItem>
       <Text>Current blood status: {status}</Text>
     </View>
