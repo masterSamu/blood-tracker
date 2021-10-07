@@ -11,7 +11,7 @@ const bloodAllStatus = () => {
     const [bloodType, setBloodType] = useState("0-");
 
     async function fetchAllBloodtypes(){
-        await fetch("http://10.0.2.2:8080/rest/bloodservice/getdataforallbloodtypes") //Function returns a value, which is a parameter
+        await fetch("https://bloodtracker.appspot.com/rest/bloodservice/getdataforallbloodtypes") //Function returns a value, which is a parameter
         .then(parameter=>parameter.json()) //to the next part (parameter). And parameter.json() returns a value, which is a parameter
         .then(anotherParameter=>setAllBloodtypes(anotherParameter)); //to the next (anotherParameter), which is set to movies
     }
