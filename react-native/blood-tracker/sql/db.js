@@ -65,3 +65,25 @@ export const fetchAllPerson=()=>{
     });
     return promise;
 };
+
+//Should be correct but need confirmation and still figure out how the method gets the correct person - Joni
+export const updatePerson=(bloodType, id)=>{
+    const promise=new Promise((resolve, reject)=>{
+        db.transaction((tx)=>{
+            //Here we use the Prepared statement, just putting placeholders to the values to be updated
+            tx.executeSql('UPDATE donor SET bloodtype=? WHERE id=?',
+            //And the values come here
+            [bloodType, id],
+            //If the transaction succeeds, this is called
+            (_, result)=>{
+                resolve(result);
+            },
+            //If the transaction fails, this is called
+            (_,err)=>{
+                reject(err);
+            }
+            );
+        });
+    });
+    return promise;
+};
