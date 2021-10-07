@@ -4,6 +4,7 @@ import * as Notifications from "expo-notifications";
 import { checkBloodTypeState } from "../helperFunctions/bloodTypeFunctions";
 import BloodStatusItem from "../components/bloodStatusItem";
 import AddBloodTypeModal from "../components/AddBloodTypeModal";
+import { getBLoodDataForBloodType } from "../Fetch/Fetch";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -19,59 +20,42 @@ const bloodStatus = () => {
   const [bloodTypeError, setBloodTypeError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [generalError, setGeneralError] = useState(false);
 
   useEffect(() => {
     if (bloodType === "") {
       //setModalVisible(true);  uncomment this when app is finished.
     } else {
-      fetchBloodData();
+      getBloodData();
     }
     if (status === "Needed") {
       activatePushNotification();
     }
   }, [bloodType]);
 
-
-  async function fetchBloodData() {
+  async function getBloodData() {
+    setIsLoading(true);
     if (bloodType !== "" && bloodType !== null) {
-      setIsLoading(true);
-      let res = null;
       try {
-        res = await fetch(
-          "https://bloodtracker.ew.r.appspot.com/rest/bloodservice/getdataforonebloodtype",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              bloodType: bloodType,
-            }),
-          }
-        );
-      } catch (error) {
-        console.log(error);
-      }
-
-      try {
-        const responseData = await res.json();
-        console.log(responseData);
-        if (responseData !== null) {
-          setStatus(checkBloodTypeState(responseData));
+        const bloodData = await getBLoodDataForBloodType(bloodType);
+        if (bloodData !== null) {
+          setStatus(checkBloodTypeState(bloodData));
           setBloodTypeError(false);
         } else {
           setBloodTypeError(true);
         }
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        console.log(error)
+        setGeneralError(true)
+        setStatus(null)
       }
-      setIsLoading(false);
     }
+    setIsLoading(false);
   }
 
   function handlePress() {
     setStatus("");
-    fetchBloodData();
+    getBloodData();
     if (status === "Needed") {
       activatePushNotification();
     }
@@ -90,6 +74,7 @@ const bloodStatus = () => {
         refresh={handlePress}
         bloodTypeError={bloodTypeError}
         isLoading={isLoading}
+        generalError={generalError}
       ></BloodStatusItem>
       <Text>Current blood status: {status}</Text>
 
