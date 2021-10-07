@@ -8,8 +8,8 @@ export const checkBloodTypeState = (bloodData) => {
 }
 
 function bloodStatus(amount) {
-    let okLevel = 750;
-    let goodLevel = 1000;
+    let okLevel = 350;
+    let goodLevel = 750;
     let currentStatus = "";
     
     if (amount >= goodLevel) {
