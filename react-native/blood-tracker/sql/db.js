@@ -27,7 +27,7 @@ export const init=()=>{
 };
 
 
-export const addPerson=(id, bloodType)=>{
+export const addBloodType=(id, bloodType)=>{
     const promise=new Promise((resolve, reject)=>{
         db.transaction((tx)=>{
             //Here we use the Prepared statement, just putting placeholders to the values to be inserted
@@ -48,7 +48,7 @@ export const addPerson=(id, bloodType)=>{
     return promise;
 };
 
-export const fetchAllPerson=()=>{
+export const fetchAllBloodData=()=>{
     const promise=new Promise((resolve, reject)=>{
         db.transaction((tx)=>{
             //Here we select all from the table donor
@@ -67,7 +67,7 @@ export const fetchAllPerson=()=>{
 };
 
 //Should be correct but need confirmation and still figure out how the method gets the correct person - Joni
-export const updatePerson=(bloodType, id)=>{
+export const updateUserBloodType=(bloodType, id)=>{
     const promise=new Promise((resolve, reject)=>{
         db.transaction((tx)=>{
             //Here we use the Prepared statement, just putting placeholders to the values to be updated
