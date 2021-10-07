@@ -6,14 +6,16 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 
 import BloodStatus from "./screens/bloodStatus";
+import bloodAllStatus from "./screens/bloodAllStatus";
 
-const Drawer = createDrawerNavigator();
+const Drawer = createDrawerNavigator()
 
 export default function App() {
   return (
     <NavigationContainer>
       <Drawer.Navigator>
         <Drawer.Screen name="Home" component={BloodStatus} />
+        <Drawer.Screen name="Status for All Bloodtypes" component={bloodAllStatus} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
