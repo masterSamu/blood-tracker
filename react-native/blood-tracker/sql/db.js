@@ -8,7 +8,7 @@ export const init=()=>{
     const promise=new Promise((resolve, reject)=>{
         db.transaction((tx)=>{
             //By default, primary key is auto_incremented - we do not add anything to that column
-        tx.executeSql('create table if not exists donor(donorID integer not null primary key, bloodType text not null);',
+        tx.executeSql('create table if not exists donor(id integer not null primary key, bloodType text not null);',
          
             //second parameters of execution:empty brackets - this parameter is not needed when creating table            
             [],
