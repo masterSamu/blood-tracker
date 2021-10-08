@@ -71,7 +71,7 @@ export const updateUserBloodType=(bloodType, id)=>{
     const promise=new Promise((resolve, reject)=>{
         db.transaction((tx)=>{
             //Here we use the Prepared statement, just putting placeholders to the values to be updated
-            tx.executeSql('UPDATE donor SET bloodtype=? WHERE donorID=?',
+            tx.executeSql('UPDATE donor SET bloodtype=? WHERE id=?',
             //And the values come here
             [bloodType, id],
             //If the transaction succeeds, this is called

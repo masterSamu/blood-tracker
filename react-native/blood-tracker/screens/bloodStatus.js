@@ -55,12 +55,12 @@ const bloodStatus = () => {
     let userId = null;
     try {
       const dbResult = await fetchAllBloodData();
-      if (dbResult !== null) {
+      console.log("userId = " + dbResult.rows._array[0].id)
+      if (dbResult.rows._array.length > 0) {
         userBloodType = dbResult.rows._array[0].bloodType;
-        userId = dbResult.rows._array[0].donorID
+        userId = dbResult.rows._array[0].id
       } else {
-        console.log("result is null")
-        Alert.alert("Unable to read your blood data. Try again later.")
+        console.log("result is empty")
       }
     } catch (error) {
       console.log(error)
@@ -74,7 +74,7 @@ const bloodStatus = () => {
   async function setBloodStatus() {
     setIsLoading(true);
     let status = "";
-    if (bloodType !== "" && bloodType !== null) {
+    if (bloodType !== "" || bloodType !== null) {
       try {
         const bloodData = await getBLoodDataForBloodType(bloodType);
         if (bloodData !== null) {

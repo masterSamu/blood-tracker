@@ -29,11 +29,11 @@ const AddBloodTypeModal = (props) => {
         const dbReturn = await addBloodType(selectedBloodType);
       } catch (error) {
         console.log(error);
-        Alert.alert("Unable to save blodo type. Try again later.");
+        Alert.alert("Unable to save blood type. Try again later.");
       } finally {
         props.setBloodType(selectedBloodType);
         props.setModalVisible(false);
-        console.log("Bloodtype saved");
+        console.log("Bloodtype saved " + selectedBloodType);
       }
     } else {
       console.log("selectedBloodType is null");
@@ -58,7 +58,8 @@ const AddBloodTypeModal = (props) => {
   }
 
   function handleSelection() {
-    if (props.bloodType === "") {
+    console.log("handleselection: " + props.currentBloodType)
+    if (props.currentBloodType === undefined || props.currentBloodType === null || props.currentBloodType === "") {
       saveBloodType();
     } else {
       updateBloodType();
