@@ -5,7 +5,10 @@ import * as SQLite from "expo-sqlite";
 import { init, addBloodType, updateUserBloodType } from "../sql/db";
 
 // Temporarly blood data for testing.
-let bloods = [{ id: 1, bloodType: "AB+" }, { id: 2, bloodType: "O-" }];
+let bloods = [
+  { id: 1, bloodType: "AB+" },
+  { id: 2, bloodType: "O-" },
+];
 
 init()
   .then(() => {
@@ -58,8 +61,11 @@ const AddBloodTypeModal = (props) => {
   }
 
   function handleSelection() {
-    console.log("handleselection: " + props.currentBloodType)
-    if (props.currentBloodType === undefined || props.currentBloodType === null || props.currentBloodType === "") {
+    if (
+      props.currentBloodType === undefined ||
+      props.currentBloodType === null ||
+      props.currentBloodType === ""
+    ) {
       saveBloodType();
     } else {
       updateBloodType();

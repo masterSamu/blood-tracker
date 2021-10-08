@@ -55,7 +55,6 @@ const bloodStatus = () => {
     let userId = null;
     try {
       const dbResult = await fetchAllBloodData();
-      console.log("userId = " + dbResult.rows._array[0].id)
       if (dbResult.rows._array.length > 0) {
         userBloodType = dbResult.rows._array[0].bloodType;
         userId = dbResult.rows._array[0].id
