@@ -27,13 +27,13 @@ export const init=()=>{
 };
 
 
-export const addBloodType=(id, bloodType)=>{
+export const addBloodType=(bloodType)=>{
     const promise=new Promise((resolve, reject)=>{
         db.transaction((tx)=>{
             //Here we use the Prepared statement, just putting placeholders to the values to be inserted
-            tx.executeSql('insert into donor(id, bloodType) values(?,?);',
+            tx.executeSql('insert into donor(bloodType) values(?);',
             //And the values come here
-            [id, bloodType],
+            [bloodType],
             //If the transaction succeeds, this is called
             (_, result)=>{
                 resolve(result);
@@ -71,7 +71,7 @@ export const updateUserBloodType=(bloodType, id)=>{
     const promise=new Promise((resolve, reject)=>{
         db.transaction((tx)=>{
             //Here we use the Prepared statement, just putting placeholders to the values to be updated
-            tx.executeSql('UPDATE donor SET bloodtype=? WHERE id=?',
+            tx.executeSql('UPDATE donor SET bloodtype=? WHERE donorID=?',
             //And the values come here
             [bloodType, id],
             //If the transaction succeeds, this is called

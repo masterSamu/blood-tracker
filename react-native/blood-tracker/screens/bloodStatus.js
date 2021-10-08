@@ -1,45 +1,84 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View, Button, Alert } from "react-native";
 import * as Notifications from "expo-notifications";
+import * as SQLite from "expo-sqlite";
 import { checkBloodTypeState } from "../helperFunctions/bloodTypeFunctions";
 import BloodStatusItem from "../components/bloodStatusItem";
 import AddBloodTypeModal from "../components/AddBloodTypeModal";
 import { getBLoodDataForBloodType } from "../Fetch/Fetch";
+import {init, fetchAllBloodData} from "../sql/db"
+
+init()
+  .then(() => {
+    console.log("Database creation succeeded!");
+  })
+  .catch((err) => {
+    console.log("Database IS NOT initialized! " + err);
+  });
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
+    shouldShowAlert: true
   }),
 });
 
 const bloodStatus = () => {
   const [status, setStatus] = useState("");
-  const [bloodType, setBloodType] = useState("O+"); // This value should come from SQLite
+  const [userId, setUserId] = useState();
+  const [bloodType, setBloodType] = useState("");
   const [bloodTypeError, setBloodTypeError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [generalError, setGeneralError] = useState(false);
 
   useEffect(() => {
+    setUserBloodType()
+  }, [])
+
+  useEffect(() => {
     if (bloodType === "") {
-      //setModalVisible(true);  uncomment this when app is finished.
+      setModalVisible(true);
     } else {
-      getBloodData();
-    }
-    if (status === "Needed") {
-      activatePushNotification();
+      setModalVisible(false)
+      setBloodStatus();
     }
   }, [bloodType]);
 
-  async function getBloodData() {
+  useEffect(() => {
+    if (status === "Needed") {
+      activatePushNotification();
+    }
+  }, [status])
+
+  async function setUserBloodType() {
+    let userBloodType = "";
+    let userId = null;
+    try {
+      const dbResult = await fetchAllBloodData();
+      if (dbResult !== null) {
+        userBloodType = dbResult.rows._array[0].bloodType;
+        userId = dbResult.rows._array[0].donorID
+      } else {
+        console.log("result is null")
+        Alert.alert("Unable to read your blood data. Try again later.")
+      }
+    } catch (error) {
+      console.log(error)
+      Alert.alert("Error! Unable to read data.")
+    } finally {
+      setUserId(userId);
+      setBloodType(userBloodType);
+    }
+  }
+
+  async function setBloodStatus() {
     setIsLoading(true);
+    let status = "";
     if (bloodType !== "" && bloodType !== null) {
       try {
         const bloodData = await getBLoodDataForBloodType(bloodType);
         if (bloodData !== null) {
-          setStatus(checkBloodTypeState(bloodData));
+          status = checkBloodTypeState(bloodData);
           setBloodTypeError(false);
         } else {
           setBloodTypeError(true);
@@ -47,7 +86,9 @@ const bloodStatus = () => {
       } catch (error) {
         console.log(error)
         setGeneralError(true)
-        setStatus(null)
+        setStatus(status)
+      } finally {
+        setStatus(status);
       }
     }
     setIsLoading(false);
@@ -55,7 +96,7 @@ const bloodStatus = () => {
 
   function handlePress() {
     setStatus("");
-    getBloodData();
+    setBloodStatus();
     if (status === "Needed") {
       activatePushNotification();
     }
@@ -76,13 +117,15 @@ const bloodStatus = () => {
         isLoading={isLoading}
         generalError={generalError}
       ></BloodStatusItem>
-      <Text>Current blood status: {status}</Text>
+      <Text style={{marginBottom: 10}}>Current blood status: {status}</Text>
 
-      <Button onPress={openModal} title="Open add blood status" />
+      <Button onPress={openModal} title="Change blood type" />
       <AddBloodTypeModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
+        currentBloodType={bloodType}
         setBloodType={setBloodType}
+        userId={userId}
       ></AddBloodTypeModal>
     </View>
   );

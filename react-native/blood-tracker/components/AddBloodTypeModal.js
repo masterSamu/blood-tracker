@@ -1,25 +1,69 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Modal, Pressable } from "react-native";
+import { StyleSheet, Text, View, Modal, Pressable, Alert } from "react-native";
 import BloodDropDownPicker from "./BloodDropDownPicker";
+import * as SQLite from "expo-sqlite";
+import { init, addBloodType, updateUserBloodType } from "../sql/db";
 
 // Temporarly blood data for testing.
-let bloods = [
-  { label: "AB+", value: "AB+" },
-  { label: "O-", value: "O-" },
-];
+let bloods = [{ id: 1, bloodType: "AB+" }, { id: 2, bloodType: "O-" }];
+
+init()
+  .then(() => {
+    console.log("Database creation succeeded!");
+  })
+  .catch((err) => {
+    console.log("Database IS NOT initialized! " + err);
+  });
 
 const AddBloodTypeModal = (props) => {
   const [bloodTypeList, setBloodTypeList] = useState([]);
   const [selectedBloodType, setSelectedBloodType] = useState("");
 
-  function handleSelection() {
-    props.setBloodType(selectedBloodType);
-    props.setModalVisible(false);
+  useEffect(() => {
+    setBloodTypeList(bloods);
+  }, []);
+
+  async function saveBloodType() {
+    if (selectedBloodType !== "") {
+      try {
+        const dbReturn = await addBloodType(selectedBloodType);
+      } catch (error) {
+        console.log(error);
+        Alert.alert("Unable to save blodo type. Try again later.");
+      } finally {
+        props.setBloodType(selectedBloodType);
+        props.setModalVisible(false);
+        console.log("Bloodtype saved");
+      }
+    } else {
+      console.log("selectedBloodType is null");
+    }
   }
 
-  useEffect(() => {
-      setBloodTypeList(bloods)
-  }, [])
+  async function updateBloodType() {
+    if (props.userId !== null) {
+      try {
+        await updateUserBloodType(selectedBloodType, props.userId);
+      } catch (error) {
+        console.log(error);
+        Alert.alert("Unable to update blood type. Try again later");
+      } finally {
+        props.setBloodType(selectedBloodType);
+        props.setModalVisible(false);
+        console.log("Bloodtype updated");
+      }
+    } else {
+      console.log("userId is null");
+    }
+  }
+
+  function handleSelection() {
+    if (props.bloodType === "") {
+      saveBloodType();
+    } else {
+      updateBloodType();
+    }
+  }
 
   return (
     <View>
@@ -36,6 +80,7 @@ const AddBloodTypeModal = (props) => {
           <BloodDropDownPicker
             setModalVisible={props.setModalVisible}
             items={bloodTypeList}
+            currentBloodType={props.currentBloodType}
             setSelectedBloodType={setSelectedBloodType}
           ></BloodDropDownPicker>
           <View style={styles.btnContainer}>
