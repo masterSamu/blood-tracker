@@ -1,4 +1,4 @@
-
+/**@author Samu */
 export const getBorderColor = (status) => {
   if (status === "Needed") return { borderColor: "salmon" };
   if (status === "Ok") return { borderColor: "yellow" };

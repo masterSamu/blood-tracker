@@ -1,3 +1,5 @@
+/**@author Samu */
+
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Button, Alert } from "react-native";
 import * as Notifications from "expo-notifications";

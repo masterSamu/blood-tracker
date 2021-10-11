@@ -1,3 +1,5 @@
+/** @author Samu */
+
 import React from "react";
 import {
   StyleSheet,

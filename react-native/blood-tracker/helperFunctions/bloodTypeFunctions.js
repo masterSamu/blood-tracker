@@ -1,4 +1,4 @@
-
+/**@author Samu */
 export const checkBloodTypeState = (bloodData) => {
     if (bloodData != null) {
         return bloodStatus(bloodData.amount)
