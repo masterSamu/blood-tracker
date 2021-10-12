@@ -11,13 +11,7 @@ import { getBorderColor } from "../helperFunctions/styleFunctions";
 import ActivityIndicatorComponent from "./ActivityIndicator";
 
 const bloodStatusItem = (props) => {
-  function displayBloodType() {
-    if (!props.bloodTypeError) {
-      return { display: "flex" };
-    } else {
-      return { display: "none" };
-    }
-  }
+  
 
   return (
     <View style={styles.container}>
@@ -31,14 +25,10 @@ const bloodStatusItem = (props) => {
           onPress={props.refresh}
           underlayColor={"black"}
         >
-          { props.generalError ? (
-            <Text style={{fontSize: 30}}>Error</Text>
-          ) : (
-            <Text style={[{ fontSize: 65 }, displayBloodType()]}>
+          <Text style={{ fontSize: 65 }}>
             {props.bloodType}
           </Text>
-          )}
-          <Text style={{ fontSize: 14 }}>Tap to refresh</Text>
+          <Text style={{ fontSize: 14 }}>Touch to refresh</Text>
         </TouchableOpacity>
       )}
     </View>
