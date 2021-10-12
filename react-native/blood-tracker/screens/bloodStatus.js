@@ -1,3 +1,5 @@
+/**@author Samu */
+
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Button, Alert } from "react-native";
 import * as Notifications from "expo-notifications";
@@ -5,8 +7,9 @@ import * as SQLite from "expo-sqlite";
 import { checkBloodTypeState } from "../helperFunctions/bloodTypeFunctions";
 import BloodStatusItem from "../components/bloodStatusItem";
 import AddBloodTypeModal from "../components/AddBloodTypeModal";
+import ErrorMsg from "../components/ErrorMsg";
 import { getBLoodDataForBloodType } from "../Fetch/Fetch";
-import {init, fetchAllBloodData} from "../sql/db"
+import { init, fetchAllBloodData } from "../sql/db";
 
 init()
   .then(() => {
@@ -18,7 +21,7 @@ init()
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true
+    shouldShowAlert: true,
   }),
 });
 
@@ -26,20 +29,21 @@ const bloodStatus = () => {
   const [status, setStatus] = useState("");
   const [userId, setUserId] = useState();
   const [bloodType, setBloodType] = useState("");
-  const [bloodTypeError, setBloodTypeError] = useState(false);
+  const [bloodTypeIsNull, setBloodTypeIsNull] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [generalError, setGeneralError] = useState(false);
+  const [fetchingError, setFetchingError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
-    setUserBloodType()
-  }, [])
+    setUserBloodType();
+  }, []);
 
   useEffect(() => {
     if (bloodType === "") {
       setModalVisible(true);
     } else {
-      setModalVisible(false)
+      setModalVisible(false);
       setBloodStatus();
     }
   }, [bloodType]);
@@ -48,7 +52,7 @@ const bloodStatus = () => {
     if (status === "Needed") {
       activatePushNotification();
     }
-  }, [status])
+  }, [status]);
 
   async function setUserBloodType() {
     let userBloodType = "";
@@ -57,16 +61,16 @@ const bloodStatus = () => {
       const dbResult = await fetchAllBloodData();
       if (dbResult.rows._array.length > 0) {
         userBloodType = dbResult.rows._array[0].bloodType;
-        userId = dbResult.rows._array[0].id
-      } else {
-        console.log("result is empty")
+        userId = dbResult.rows._array[0].id;
       }
     } catch (error) {
-      console.log(error)
-      Alert.alert("Error! Unable to read data.")
+      console.log(error);
+      setFetchingError(true);
+      setErrorMsg("Unable to read user's blood type");
     } finally {
       setUserId(userId);
       setBloodType(userBloodType);
+      setFetchingError(false);
     }
   }
 
@@ -78,16 +82,15 @@ const bloodStatus = () => {
         const bloodData = await getBLoodDataForBloodType(bloodType);
         if (bloodData !== null) {
           status = checkBloodTypeState(bloodData);
-          setBloodTypeError(false);
-        } else {
-          setBloodTypeError(true);
         }
       } catch (error) {
-        console.log(error)
-        setGeneralError(true)
-        setStatus(status)
+        console.log(error);
+        setFetchingError(true);
+        setErrorMsg("Unable to check blood status.");
+        setStatus(status);
       } finally {
         setStatus(status);
+        setFetchingError(false);
       }
     }
     setIsLoading(false);
@@ -107,16 +110,17 @@ const bloodStatus = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={{ fontSize: 20 }}>Status for your blood type</Text>
+      <ErrorMsg error={fetchingError} message={errorMsg}></ErrorMsg>
+      <Text style={{ fontSize: 24 }}>Status for your blood type</Text>
       <BloodStatusItem
         status={status}
         bloodType={bloodType}
         refresh={handlePress}
-        bloodTypeError={bloodTypeError}
         isLoading={isLoading}
-        generalError={generalError}
       ></BloodStatusItem>
-      <Text style={{marginBottom: 10}}>Current blood status: {status}</Text>
+      <Text style={{ marginBottom: 10, fontSize: 18 }}>
+        Current blood status: {status}
+      </Text>
 
       <Button onPress={openModal} title="Change blood type" />
       <AddBloodTypeModal
@@ -137,7 +141,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-  },
+  }
 });
 
 async function activatePushNotification() {

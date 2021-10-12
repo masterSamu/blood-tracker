@@ -1,14 +1,11 @@
+/** @author Samu */
+
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Modal, Pressable, Alert } from "react-native";
 import BloodDropDownPicker from "./BloodDropDownPicker";
 import * as SQLite from "expo-sqlite";
 import { init, addBloodType, updateUserBloodType } from "../sql/db";
-
-// Temporarly blood data for testing.
-let bloods = [
-  { id: 1, bloodType: "AB+" },
-  { id: 2, bloodType: "O-" },
-];
+import { getAllBloodData } from "../Fetch/Fetch";
 
 init()
   .then(() => {
@@ -21,10 +18,28 @@ init()
 const AddBloodTypeModal = (props) => {
   const [bloodTypeList, setBloodTypeList] = useState([]);
   const [selectedBloodType, setSelectedBloodType] = useState("");
+  const [fetchError, setFetchError] = useState(false);
 
   useEffect(() => {
-    setBloodTypeList(bloods);
+    getAllBloodTypesInArray();
   }, []);
+
+  async function getAllBloodTypesInArray() {
+    let data = null;
+    try {
+      const result = await getAllBloodData();
+      if (result.length > 0) {
+        data = result;
+      } else {
+        console.log("Array is empty");
+      }
+    } catch (error) {
+      console.log(error);
+      setFetchError(true)
+    } finally {
+      setBloodTypeList(data);
+    }
+  }
 
   async function saveBloodType() {
     if (selectedBloodType !== "") {
@@ -84,12 +99,17 @@ const AddBloodTypeModal = (props) => {
           <Text style={{ fontSize: 25, margin: 15 }}>
             Select your blood type
           </Text>
-          <BloodDropDownPicker
-            setModalVisible={props.setModalVisible}
-            items={bloodTypeList}
-            currentBloodType={props.currentBloodType}
-            setSelectedBloodType={setSelectedBloodType}
-          ></BloodDropDownPicker>
+
+          {fetchError ? (
+            <Text style={{fontSize: 18}}>Error, try again later.</Text>
+          ) : (
+            <BloodDropDownPicker
+              setModalVisible={props.setModalVisible}
+              items={bloodTypeList}
+              currentBloodType={props.currentBloodType}
+              setSelectedBloodType={setSelectedBloodType}
+            ></BloodDropDownPicker>
+          )}
           <View style={styles.btnContainer}>
             <Pressable style={styles.btnSelect} onPress={handleSelection}>
               <Text style={{ fontSize: 25 }}>Select</Text>
@@ -120,7 +140,7 @@ const styles = StyleSheet.create({
     marginTop: "auto",
     justifyContent: "space-evenly",
     alignItems: "center",
-    backgroundColor: "#FF7F7F",
+    backgroundColor: "#FF9999",
     padding: 15,
   },
   btnContainer: {

@@ -3,7 +3,7 @@ import * as SQLite from 'expo-sqlite';
 
 const db=SQLite.openDatabase('bloodtracker');
 
-//method returns a Promise - in the calling side .then(...).then(...)....catch(...) can be used
+/**@author Markus */
 export const init=()=>{
     const promise=new Promise((resolve, reject)=>{
         db.transaction((tx)=>{
@@ -26,7 +26,7 @@ export const init=()=>{
     return promise;
 };
 
-
+/**@author Markus */
 export const addBloodType=(bloodType)=>{
     const promise=new Promise((resolve, reject)=>{
         db.transaction((tx)=>{
@@ -48,6 +48,7 @@ export const addBloodType=(bloodType)=>{
     return promise;
 };
 
+/**@author Markus */
 export const fetchAllBloodData=()=>{
     const promise=new Promise((resolve, reject)=>{
         db.transaction((tx)=>{
@@ -66,7 +67,7 @@ export const fetchAllBloodData=()=>{
     return promise;
 };
 
-//Should be correct but need confirmation and still figure out how the method gets the correct person - Joni
+/**@author Joni */
 export const updateUserBloodType=(bloodType, id)=>{
     const promise=new Promise((resolve, reject)=>{
         db.transaction((tx)=>{

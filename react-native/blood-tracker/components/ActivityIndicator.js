@@ -1,3 +1,5 @@
+/** @author Samu */
+
 import React from "react";
 import { ActivityIndicator, StyleSheet, View, Text } from "react-native";
 
