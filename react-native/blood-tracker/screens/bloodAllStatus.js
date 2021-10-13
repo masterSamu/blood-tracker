@@ -4,11 +4,20 @@ import { checkBloodTypeState } from "../helperFunctions/bloodTypeFunctions";
 
 const bloodAllStatus = () => {
     const [bloodData, setBloodData] = useState();
-    const [id, setId] = useState();
     const [allBloodtypes, setAllBloodtypes] = useState([]);
     const [bloodTypeError, setBloodTypeError] = useState(false);
-    const [status, setStatus] = useState("Good");
-    const [bloodType, setBloodType] = useState("0-");
+    const [status, setStatus] = useState();
+
+    let bloodtypes = JSON.stringify(allBloodtypes);
+
+    const abPlus = bloodtypes.slice(22, 25);
+    const abMinus = bloodtypes.slice(62, 65);
+    const bPlus = bloodtypes.slice(102, 104);
+    const bMinus = bloodtypes.slice(141, 143);
+    const aPlus = bloodtypes.slice(181, 183);
+    const aMinus = bloodtypes.slice(221, 223);
+    const oPlus = bloodtypes.slice(261, 263);
+    const oMinus = bloodtypes.slice(300, 302);
 
     async function fetchAllBloodtypes(){
         await fetch("https://bloodtracker.appspot.com/rest/bloodservice/getdataforallbloodtypes") //Function returns a value, which is a parameter
@@ -30,61 +39,60 @@ const bloodAllStatus = () => {
       }
     }
 
+    const pressHandler = () => {
+      fetchAllBloodtypes();
+      console.log("Pressed...")    
+    }
+
     return (
-        <View style={styles.container}>
-          <ScrollView>
-          <View  style={[styles.containerStatus, getBorderColor(status)]}
-          >
+      <View style={styles.container}>
+      <Button onPress={pressHandler} title="fetch" />
+      <ScrollView>
+      <View  style={[styles.containerStatus, getBorderColor(status)]}>
+        <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
+          {abPlus}
+        </Text>
+      </View>
+      <View style={[styles.containerStatus, getBorderColor(status)]}>
+        <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
+          {abMinus}
+          </Text>
+        </View>
+      <View  style={[styles.containerStatus, getBorderColor(status)]}>
+        <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
+          {bPlus}
+        </Text>
+      </View>
+      <View   style={[styles.containerStatus, getBorderColor(status)]}>
+        <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
+             {bMinus}
+        </Text>
+          </View>
+      <View    style={[styles.containerStatus, getBorderColor(status)]}>
             <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
-              {bloodType}
+              {aPlus}
+              </Text>
+          </View>
+          <View   style={[styles.containerStatus, getBorderColor(status)]}>
+            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
+              {aMinus}
             </Text>
           </View>
-          <View style={[styles.containerStatus, getBorderColor(status)]}
-          >
+          <View style={[styles.containerStatus, getBorderColor(status)]}>
             <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
-              {bloodType}
+              {oPlus}
             </Text>
           </View>
-          <View  style={[styles.containerStatus, getBorderColor(status)]}
-          >
+          <View style={[styles.containerStatus, getBorderColor(status)]}>
             <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
-              {bloodType}
-            </Text>
-          </View>
-          <View   style={[styles.containerStatus, getBorderColor(status)]}
-          >
-            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
-              {bloodType}
-            </Text>
-          </View>
-          <View    style={[styles.containerStatus, getBorderColor(status)]}
-          >
-            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
-              {bloodType}
-            </Text>
-          </View>
-          <View   style={[styles.containerStatus, getBorderColor(status)]}
-          >
-            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
-              {bloodType}
-            </Text>
-          </View>
-          <View style={[styles.containerStatus, getBorderColor(status)]}
-          >
-            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
-              {bloodType}
-            </Text>
-          </View>
-          <View style={[styles.containerStatus, getBorderColor(status)]}
-          >
-            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
-              {bloodType}
+              {oMinus}
             </Text>
           </View>
           </ScrollView>
         </View>
       );
-};
+
+    }
 export default bloodAllStatus;
 
 const styles = StyleSheet.create({
