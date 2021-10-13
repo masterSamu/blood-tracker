@@ -3,12 +3,12 @@ import * as SQLite from 'expo-sqlite';
 
 const db=SQLite.openDatabase('bloodtracker');
 
-//method returns a Promise - in the calling side .then(...).then(...)....catch(...) can be used
+/**@author Markus */
 export const init=()=>{
     const promise=new Promise((resolve, reject)=>{
         db.transaction((tx)=>{
             //By default, primary key is auto_incremented - we do not add anything to that column
-        tx.executeSql('create table if not exists donor(donorID integer not null primary key, bloodType text not null);',
+        tx.executeSql('create table if not exists donor(id integer not null primary key, bloodType text not null);',
          
             //second parameters of execution:empty brackets - this parameter is not needed when creating table            
             [],
@@ -26,14 +26,14 @@ export const init=()=>{
     return promise;
 };
 
-
-export const addBloodType=(id, bloodType)=>{
+/**@author Markus */
+export const addBloodType=(bloodType)=>{
     const promise=new Promise((resolve, reject)=>{
         db.transaction((tx)=>{
             //Here we use the Prepared statement, just putting placeholders to the values to be inserted
-            tx.executeSql('insert into donor(id, bloodType) values(?,?);',
+            tx.executeSql('insert into donor(bloodType) values(?);',
             //And the values come here
-            [id, bloodType],
+            [bloodType],
             //If the transaction succeeds, this is called
             (_, result)=>{
                 resolve(result);
@@ -48,6 +48,7 @@ export const addBloodType=(id, bloodType)=>{
     return promise;
 };
 
+/**@author Markus */
 export const fetchAllBloodData=()=>{
     const promise=new Promise((resolve, reject)=>{
         db.transaction((tx)=>{
@@ -66,7 +67,7 @@ export const fetchAllBloodData=()=>{
     return promise;
 };
 
-//Should be correct but need confirmation and still figure out how the method gets the correct person - Joni
+/**@author Joni */
 export const updateUserBloodType=(bloodType, id)=>{
     const promise=new Promise((resolve, reject)=>{
         db.transaction((tx)=>{

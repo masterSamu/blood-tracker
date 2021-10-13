@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Button, TouchableOpacity, ScrollView } from "react-native";
 import { checkBloodTypeState } from "../helperFunctions/bloodTypeFunctions";
 
 const bloodAllStatus = () => {
@@ -11,7 +11,7 @@ const bloodAllStatus = () => {
     const [bloodType, setBloodType] = useState("0-");
 
     async function fetchAllBloodtypes(){
-        await fetch("http://10.0.2.2:8080/rest/bloodservice/getdataforallbloodtypes") //Function returns a value, which is a parameter
+        await fetch("https://bloodtracker.appspot.com/rest/bloodservice/getdataforallbloodtypes") //Function returns a value, which is a parameter
         .then(parameter=>parameter.json()) //to the next part (parameter). And parameter.json() returns a value, which is a parameter
         .then(anotherParameter=>setAllBloodtypes(anotherParameter)); //to the next (anotherParameter), which is set to movies
     }
@@ -32,34 +32,56 @@ const bloodAllStatus = () => {
 
     return (
         <View style={styles.container}>
-          <View
-            style={[styles.containerStatus, getBorderColor(status)]}
+          <ScrollView>
+          <View  style={[styles.containerStatus, getBorderColor(status)]}
           >
-            <Text style={[{ fontSize: 55 }, displayBloodStatus()]}>
+            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
               {bloodType}
             </Text>
           </View>
-          <View
-            style={[styles.containerStatus, getBorderColor(status)]}
+          <View style={[styles.containerStatus, getBorderColor(status)]}
           >
-            <Text style={[{ fontSize: 55 }, displayBloodStatus()]}>
+            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
               {bloodType}
             </Text>
           </View>
-          <View
-            style={[styles.containerStatus, getBorderColor(status)]}
+          <View  style={[styles.containerStatus, getBorderColor(status)]}
           >
-            <Text style={[{ fontSize: 55 }, displayBloodStatus()]}>
+            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
               {bloodType}
             </Text>
           </View>
-          <View
-            style={[styles.containerStatus, getBorderColor(status)]}
+          <View   style={[styles.containerStatus, getBorderColor(status)]}
           >
-            <Text style={[{ fontSize: 55 }, displayBloodStatus()]}>
+            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
               {bloodType}
             </Text>
           </View>
+          <View    style={[styles.containerStatus, getBorderColor(status)]}
+          >
+            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
+              {bloodType}
+            </Text>
+          </View>
+          <View   style={[styles.containerStatus, getBorderColor(status)]}
+          >
+            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
+              {bloodType}
+            </Text>
+          </View>
+          <View style={[styles.containerStatus, getBorderColor(status)]}
+          >
+            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
+              {bloodType}
+            </Text>
+          </View>
+          <View style={[styles.containerStatus, getBorderColor(status)]}
+          >
+            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
+              {bloodType}
+            </Text>
+          </View>
+          </ScrollView>
         </View>
       );
 };
@@ -71,11 +93,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    flexDirection: "row",
+    flexDirection: "column",
   },
   containerStatus: {
-    height: 200,
-    width: 200,
+    height: 100,
+    width: 100,
     margin: 25,
     borderWidth: 10,
     borderRadius: 365,
