@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Button, TouchableOpacity, ScrollView } from "react-native";
 import { checkBloodTypeState } from "../helperFunctions/bloodTypeFunctions";
+import { getBorderColor } from "../helperFunctions/styleFunctions";
 
 const bloodAllStatus = () => {
     const [bloodData, setBloodData] = useState();
-    const [id, setId] = useState();
     const [allBloodtypes, setAllBloodtypes] = useState([]);
     const [bloodTypeError, setBloodTypeError] = useState(false);
-    const [status, setStatus] = useState("Good");
-    const [bloodType, setBloodType] = useState("0-");
+    const [status, setStatus] = useState();
+    const [bloodType, setBloodType] = useState();
+    const [bloodStats, setArray] = useState([]);
+
 
     async function fetchAllBloodtypes(){
         await fetch("https://bloodtracker.appspot.com/rest/bloodservice/getdataforallbloodtypes") //Function returns a value, which is a parameter
@@ -16,12 +18,20 @@ const bloodAllStatus = () => {
         .then(anotherParameter=>setAllBloodtypes(anotherParameter)); //to the next (anotherParameter), which is set to movies
     }
 
-    function getBorderColor(status) {
-      if (status === "Needed") return { borderColor: "salmon" };
-      if (status === "Ok") return { borderColor: "lightyellow" };
-      if (status === "Good") return { borderColor: "lightgreen" };
-    }
+    useEffect(() => {
+    makeArray();
 
+    }, [allBloodtypes])
+
+    function makeArray() {
+      let newArray = [];
+      allBloodtypes.forEach((item) => {
+        console.log(item)
+        newArray.push({bloodType: item.bloodType, status: checkBloodTypeState(item)})
+      })
+      setArray(newArray)
+    }
+      
     function displayBloodStatus() {
       if (!bloodTypeError) {
         return { display: "flex" };
@@ -30,61 +40,44 @@ const bloodAllStatus = () => {
       }
     }
 
+    //this fetches and updates
+
+    const pressHandler = () => {
+
+      fetchAllBloodtypes();
+      console.log("Pressed...")
+      
+    }
+
+  useEffect(() => {
+    fetchAllBloodtypes();
+
+  }, [])
+    
     return (
-        <View style={styles.container}>
-          <ScrollView>
-          <View  style={[styles.containerStatus, getBorderColor(status)]}
-          >
-            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
-              {bloodType}
+      <View style={styles.container}>
+      <Button onPress={pressHandler} title="Update" />
+      <ScrollView>
+     
+      {
+        bloodStats.map((item, index) => {
+          return (
+          <View key={index} style={[styles.containerStatus, getBorderColor(item.status)]}>
+            <Text style={[{fontSize:25}, displayBloodStatus()]}>
+              {item.bloodType}
             </Text>
-          </View>
-          <View style={[styles.containerStatus, getBorderColor(status)]}
-          >
-            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
-              {bloodType}
-            </Text>
-          </View>
-          <View  style={[styles.containerStatus, getBorderColor(status)]}
-          >
-            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
-              {bloodType}
-            </Text>
-          </View>
-          <View   style={[styles.containerStatus, getBorderColor(status)]}
-          >
-            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
-              {bloodType}
-            </Text>
-          </View>
-          <View    style={[styles.containerStatus, getBorderColor(status)]}
-          >
-            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
-              {bloodType}
-            </Text>
-          </View>
-          <View   style={[styles.containerStatus, getBorderColor(status)]}
-          >
-            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
-              {bloodType}
-            </Text>
-          </View>
-          <View style={[styles.containerStatus, getBorderColor(status)]}
-          >
-            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
-              {bloodType}
-            </Text>
-          </View>
-          <View style={[styles.containerStatus, getBorderColor(status)]}
-          >
-            <Text style={[{ fontSize: 25 }, displayBloodStatus()]}>
-              {bloodType}
-            </Text>
-          </View>
+            </View>
+            
+          )
+
+      } )
+      }
+
           </ScrollView>
         </View>
       );
-};
+
+    }
 export default bloodAllStatus;
 
 const styles = StyleSheet.create({
@@ -107,4 +100,5 @@ const styles = StyleSheet.create({
   text: {
     
   },
+
 });
