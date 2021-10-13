@@ -5,13 +5,17 @@ import { StyleSheet } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 
 const BloodDropDownPicker = (props) => {
-  const [items, setItems] = useState(props.items);
+  const [items, setItems] = useState([]);
   const [value, setValue] = useState(null);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
+    setItems(props.items)
+  }, [props.items])
+
+  useEffect(() => {
     setValue(props.currentBloodType)
-  }, [])
+  }, [props.currentBloodType])
 
   return (
     <DropDownPicker
@@ -27,7 +31,7 @@ const BloodDropDownPicker = (props) => {
       setItems={setItems}
       value={value}
       setValue={setValue}
-      placeholder={props.currentBloodType === "" ? props.currentBloodType : "Select"}
+      placeholder={props.currentBloodType.length > 0 ? props.currentBloodType : "Select"}
       itemSeparator={true}
       closeAfterSelecting={true}
       onChangeValue={() => props.setSelectedBloodType(value)}
