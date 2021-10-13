@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Button, TouchableOpacity, ScrollView } from "react-native";
 import { checkBloodTypeState } from "../helperFunctions/bloodTypeFunctions";
-import { getBLoodDataForBloodType } from "../Fetch/Fetch";
 import { getBorderColor } from "../helperFunctions/styleFunctions";
-import { fetchAllBloodData } from "../sql/db";
 
 const bloodAllStatus = () => {
     const [bloodData, setBloodData] = useState();
@@ -11,7 +9,7 @@ const bloodAllStatus = () => {
     const [bloodTypeError, setBloodTypeError] = useState(false);
     const [status, setStatus] = useState();
     const [bloodType, setBloodType] = useState();
-    const [array, setArray] = useState([]);
+    const [bloodStats, setArray] = useState([]);
 
 
     async function fetchAllBloodtypes(){
@@ -62,7 +60,7 @@ const bloodAllStatus = () => {
       <ScrollView>
      
       {
-        array.map((item, index) => {
+        bloodStats.map((item, index) => {
           return (
           <View key={index} style={[styles.containerStatus, getBorderColor(item.status)]}>
             <Text style={[{fontSize:25}, displayBloodStatus()]}>
