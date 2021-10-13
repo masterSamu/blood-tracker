@@ -19,6 +19,8 @@ const AddBloodTypeModal = (props) => {
   const [bloodTypeList, setBloodTypeList] = useState([]);
   const [selectedBloodType, setSelectedBloodType] = useState("");
   const [fetchError, setFetchError] = useState(false);
+  const [selectError, setSelectError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("hello");
 
   useEffect(() => {
     getAllBloodTypesInArray();
@@ -35,7 +37,7 @@ const AddBloodTypeModal = (props) => {
       }
     } catch (error) {
       console.log(error);
-      setFetchError(true)
+      setFetchError(true);
     } finally {
       setBloodTypeList(data);
     }
@@ -50,16 +52,20 @@ const AddBloodTypeModal = (props) => {
         Alert.alert("Unable to save blood type. Try again later.");
       } finally {
         props.setBloodType(selectedBloodType);
+        props.setUserDataFromSQLite;
         props.setModalVisible(false);
         console.log("Bloodtype saved " + selectedBloodType);
+        setSelectError(false);
       }
     } else {
       console.log("selectedBloodType is null");
+      setSelectError(true);
+      setErrorMsg("Select bloodtype first");
     }
   }
 
   async function updateBloodType() {
-    if (props.userId !== null) {
+    if (props.userId !== null && selectedBloodType !== "") {
       try {
         await updateUserBloodType(selectedBloodType, props.userId);
       } catch (error) {
@@ -69,9 +75,12 @@ const AddBloodTypeModal = (props) => {
         props.setBloodType(selectedBloodType);
         props.setModalVisible(false);
         console.log("Bloodtype updated");
+        setSelectError(false);
       }
     } else {
       console.log("userId is null");
+      setSelectError(true);
+      setErrorMsg("Select bloodtype first");
     }
   }
 
@@ -86,22 +95,29 @@ const AddBloodTypeModal = (props) => {
       updateBloodType();
     }
   }
-
+  
+  function cancelBtnVisible() {
+    if (props.currentBloodType === "") return { display: "none" };
+    else return { display: "flex" };
+  }
+  
   return (
     <View>
       <Modal
         style={styles.modalWindow}
         animationType="fade"
-        transparent={true}
         visible={props.modalVisible}
-      >
+        >
         <View style={styles.container}>
+          {selectError ? (
+            <Text style={styles.errorMsgStyle}>{errorMsg}</Text>
+          ) : null}
           <Text style={{ fontSize: 25, margin: 15 }}>
             Select your blood type
           </Text>
 
           {fetchError ? (
-            <Text style={{fontSize: 18}}>Error, try again later.</Text>
+            <Text style={{ fontSize: 18 }}>Error, try again later.</Text>
           ) : (
             <BloodDropDownPicker
               setModalVisible={props.setModalVisible}
@@ -116,8 +132,8 @@ const AddBloodTypeModal = (props) => {
             </Pressable>
             <Pressable
               onPress={() => props.setModalVisible(false)}
-              style={styles.btnClose}
-            >
+              style={[styles.btnClose, cancelBtnVisible()]}
+              >
               <Text style={{ fontSize: 25 }}>Cancel</Text>
             </Pressable>
           </View>
@@ -149,16 +165,24 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   btnSelect: {
-    padding: 10,
+    padding: 15,
     margin: 10,
     backgroundColor: "lightgreen",
-    borderWidth: 2,
+    borderRadius: 8,
   },
   btnClose: {
-    flexDirection: "row",
-    padding: 10,
+    padding: 15,
     margin: 10,
     backgroundColor: "lightgrey",
-    borderWidth: 2,
+    borderRadius: 8,
+  },
+  errorMsgStyle: {
+    backgroundColor: "#FFF",
+    fontSize: 20,
+    borderRadius: 8,
+    borderColor: "red",
+    borderWidth: 3,
+    padding: 20,
+    color: "#000"
   },
 });

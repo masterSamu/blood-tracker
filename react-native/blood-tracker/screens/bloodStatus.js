@@ -1,7 +1,7 @@
 /**@author Samu */
 
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Button, Alert } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import * as Notifications from "expo-notifications";
 import * as SQLite from "expo-sqlite";
 import { checkBloodTypeState } from "../helperFunctions/bloodTypeFunctions";
@@ -29,7 +29,6 @@ const bloodStatus = () => {
   const [status, setStatus] = useState("");
   const [userId, setUserId] = useState();
   const [bloodType, setBloodType] = useState("");
-  const [bloodTypeIsNull, setBloodTypeIsNull] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [fetchingError, setFetchingError] = useState(false);
@@ -111,7 +110,7 @@ const bloodStatus = () => {
   return (
     <View style={styles.container}>
       <ErrorMsg error={fetchingError} message={errorMsg}></ErrorMsg>
-      <Text style={{ fontSize: 24 }}>Status for your blood type</Text>
+      <Text style={{ fontSize: 26 }}>Status for your blood type</Text>
       <BloodStatusItem
         status={status}
         bloodType={bloodType}
@@ -122,13 +121,16 @@ const bloodStatus = () => {
         Current blood status: {status}
       </Text>
 
-      <Button onPress={openModal} title="Change blood type" />
+      <TouchableOpacity style={styles.changeBtn} onPress={openModal} >
+        <Text style={styles.changeBtnText}>Change blood type</Text>
+      </TouchableOpacity>
       <AddBloodTypeModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         currentBloodType={bloodType}
         setBloodType={setBloodType}
         userId={userId}
+        setUserDataFromSQLite={setUserBloodType()}
       ></AddBloodTypeModal>
     </View>
   );
@@ -141,6 +143,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
+  },
+  changeBtn: {
+    backgroundColor: "#FF9999",
+    padding: 15,
+    borderRadius: 8,
+    margin: 20,
+  },
+  changeBtnText: {
+    color: "#000",
+    fontSize: 18,
   }
 });
 
