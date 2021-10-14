@@ -1,5 +1,6 @@
 /**
  *  Error message component to top of the screen.
+ * @author Samu
  * @param boolean error
  * @param String message
  *  */ 

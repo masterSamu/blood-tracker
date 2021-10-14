@@ -1,7 +1,7 @@
 import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import React from "react";
+import { StyleSheet } from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 
@@ -24,19 +24,19 @@ export default function App() {
         <Drawer.Screen
           name="My Bloodtype"
           component={BloodStatus}
-          options={customerScreenOptions}
+          options={screenOptions}
         />
         <Drawer.Screen
           name="All Bloodtypes"
           component={bloodAllStatus}
-          options={customerScreenOptions}
+          options={screenOptions}
         />
       </Drawer.Navigator>
     </NavigationContainer>
   );
 }
 
-const customerScreenOptions = {
+const screenOptions = {
   headerStyle: { backgroundColor: "#FF9999" },
   headerTintColor: "black",
   headerTitleStyle: { fontSize: 24 },

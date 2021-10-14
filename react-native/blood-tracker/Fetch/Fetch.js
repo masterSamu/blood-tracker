@@ -7,7 +7,7 @@ export const getBLoodDataForBloodType = (bloodType) => {
     }
 };
 
-/** @author Joni */
+/** @author Samu */
 export const getAllBloodData = () => {
   return fetchAllBloodtypesFromRestful();
 }
