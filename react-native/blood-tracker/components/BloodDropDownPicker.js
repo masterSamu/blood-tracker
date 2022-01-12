@@ -1,7 +1,6 @@
 /** @author Samu */
 
 import React, { useState, useEffect } from "react";
-import { StyleSheet } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
 
 const BloodDropDownPicker = (props) => {

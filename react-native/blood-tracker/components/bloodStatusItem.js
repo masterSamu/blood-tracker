@@ -11,8 +11,6 @@ import { getBorderColor } from "../helperFunctions/styleFunctions";
 import ActivityIndicatorComponent from "./ActivityIndicator";
 
 const bloodStatusItem = (props) => {
-  
-
   return (
     <View style={styles.container}>
       {props.isLoading ? (
