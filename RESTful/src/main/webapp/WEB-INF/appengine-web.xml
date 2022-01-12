@@ -12,14 +12,14 @@
   <system-properties>
     <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
     <property name="drivername" value="com.mysql.jdbc.Driver"/>
-    <property name="googleusername" value="root"/>
-    <property name="googlepassword" value="salasana"/>
-    <property name="localusername" value="bloodservice"/>
-    <property name="localpassword" value="bloodservice"/>
-    <property name="databasename" value="bloodservice"/>
+    <property name="googleusername" value="*****"/>
+    <property name="googlepassword" value="******"/>
+    <property name="localusername" value="******"/>
+    <property name="localpassword" value="******"/>
+    <property name="databasename" value="******"/>
     
     <property name="socketfactory" value="com.google.cloud.sql.mysql.SocketFactory"/>
-    <property name="cloudsqlinstance" value="bloodtracker:europe-north1:blood-tracker"/>
+    <property name="cloudsqlinstance" value="******"/>
     <property name="usessl" value="false"/>
   </system-properties>
 
