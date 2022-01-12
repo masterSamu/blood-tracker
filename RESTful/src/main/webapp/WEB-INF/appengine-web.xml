@@ -12,7 +12,7 @@
   <system-properties>
     <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
     <property name="drivername" value="com.mysql.jdbc.Driver"/>
-    <property name="googleusername" value="*****"/>
+    <property name="googleusername" value="******"/>
     <property name="googlepassword" value="******"/>
     <property name="localusername" value="******"/>
     <property name="localpassword" value="******"/>
